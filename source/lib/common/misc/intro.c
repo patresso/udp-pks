@@ -19,3 +19,22 @@ int intro(){
     free(answer);
     return type;
 }
+
+int ask_for_port(void){
+
+    printf("Select a port: [1024-50000]\n");
+    int port;
+    scanf("%d", &port);
+
+    return port;
+}
+
+in_addr_t ask_for_addr(void){
+
+    printf("Type ip addres to connect to (in dot notation): [X.X.X.X]\n");
+    char address[16];
+    scanf("%s", address);
+    in_addr_t addr = inet_addr(address);
+
+    return addr;
+}

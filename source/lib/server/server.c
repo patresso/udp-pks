@@ -2,7 +2,16 @@
 #include "../common/misc/headers/messages.h"
 #include "../common/misc/headers/constants.h"
 
-void start_server(){
+void server(int port){
+
+    //bind and listen for start message
+    //send start ack
+    //wait for start ack
+
+    //async wait for new messages
+    //be able to send
+    //if incoming message block ability to send
+    //TODO:
 
     struct sockaddr_in servaddr, cliaddr; 
     
@@ -10,7 +19,7 @@ void start_server(){
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(8123);
+    servaddr.sin_port = htons(port);
 
     bind(sockfd, (const struct sockaddr*) &servaddr, sizeof(servaddr));
 
