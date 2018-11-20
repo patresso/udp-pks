@@ -8,4 +8,5 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-int ask_for_operation(char * text);
+HEADER_FULL * recieve_message(THREAD_ARGS * args, int side);
+int send_message(THREAD_ARGS * args, HEADER_FULL * msg, int side);

@@ -34,7 +34,8 @@ void server(int port){
     pthread_create(&tid, &attr, serverside_communication, args);
 
     int op;
-    for (op = NO_VAL; ; op = ask_for_operation()){
+    char * text = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
+    for (op = NO_VAL; ; op = ask_for_operation(text)){
         if (op == NO_VAL) continue;
         switch (op){
             case QUIT:          //send closing message
@@ -58,13 +59,16 @@ void server(int port){
                                 break;
             
             case CHAT:          //establish chat
+                                print_message(INFO, "Not yet implemented");
                                 args->cmd = CHAT;
                                 break;
             
             case SEND_FILE:     //send a file to client
+                                print_message(INFO, "Not yet implemented");
                                 args->cmd = SEND_FILE;
                                 break;
-
+            default:            args->data = text;
+                                break;
         
         }   
     }

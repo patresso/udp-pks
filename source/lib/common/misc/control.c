@@ -2,7 +2,7 @@
 #include "headers/constants.h"
 #include "../misc/headers/messages.h"
 
-int ask_for_operation(){
+int ask_for_operation(char * text){
     char * op = malloc(50*sizeof(char));
     scanf("%s", op);
 
@@ -27,8 +27,11 @@ int ask_for_operation(){
     else if (strcmp(op, "$server") == 0){
         return SERVER_INFO;
     }
+    else{
+        text = op;
+    }
 
-    print_message(FAIL, "No such operation");
+    // print_message(FAIL, "No such operation");
 
     return NO_VAL;
 }

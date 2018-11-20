@@ -31,3 +31,8 @@
 
 //thread manipulation
 #define RUN 1
+
+//header constants
+#define NO_DATA 0
+#define BINARY 1
+#define ASCII 2

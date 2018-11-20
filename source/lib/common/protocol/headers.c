@@ -1,3 +1,39 @@
 #include "headers/headers.h"
+#include "../misc/headers/constants.h"
 
 //funkcie nad mojimi hlavickami 
+HEADER_FULL * parse_message_from_bytes(void * data){
+    HEADER_FULL * msg = calloc(1, sizeof(HEADER_FULL));
+    
+    msg->checksum = *(u_int16_t*)(data);
+    msg->message_type = *(u_int8_t*)(data+2);
+    msg->flags = *(FLAGS*)(data+3);
+    
+    if (msg->message_type != NO_DATA && msg->flags.message_id == 0){
+        msg->data_length = *(u_int16_t*)(data+4);
+        msg->data = (char*)data+6;
+    }
+    else if (msg->message_type != NO_DATA && msg->flags.message_id == 1 ){
+        msg->data_length = *(u_int16_t*)(data+4);
+        msg->message_stream_id = *(u_int16_t*)(data+6);
+        msg->sequence_number = *(u_int32_t*)(data+8);
+        msg->fragment_count = *(u_int32_t*)(data+12);
+        msg->data = (char*)data+16;
+    }
+    else{
+        //is a no data message
+    }
+
+
+    return msg;
+
+}
+
+HEADER_FULL * parse_bytes_to_message(void * data){
+    HEADER_FULL * msg = calloc(1, sizeof(HEADER_FULL));
+
+    //TODO:
+
+
+    return msg;
+}

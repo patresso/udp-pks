@@ -31,7 +31,8 @@ void client(in_addr_t addr, int port){
     pthread_create(&tid, &attr, clientside_communication, args); 
 
     int op;
-    for (op = NO_VAL; ; op = ask_for_operation()){
+    char * text = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
+    for (op = NO_VAL; ; op = ask_for_operation(text)){
         if (op == NO_VAL) continue;
         switch (op){
             case QUIT:          //send closing message
@@ -60,6 +61,10 @@ void client(in_addr_t addr, int port){
             
             case SEND_FILE:     //send a file to client
                                 args->cmd = SEND_FILE;
+                                break;
+
+            default:            args->data = text;
+                                args->cmd = CHAT;
                                 break;
 
         

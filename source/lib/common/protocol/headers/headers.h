@@ -32,20 +32,6 @@ typedef struct header_full{
     char * data;
 }HEADER_FULL;
 
-typedef struct header_single_msg{
-    u_int16_t checksum;
-    u_int8_t message_type;
-    FLAGS flags;
-    u_int16_t data_length;
-    char * data;
-}HEADER_SINGLE_MSG;
-
-typedef struct header_no_msg{
-    u_int16_t checksum;
-    u_int8_t message_type;
-    FLAGS flags;
-}HEADER_NO_MSG;
-
 typedef struct thread_args{
     int sockfd;
     struct sockaddr_in * serveraddr;
@@ -56,3 +42,5 @@ typedef struct thread_args{
 }THREAD_ARGS;   
 
 #endif
+
+HEADER_FULL * parse_message(void * data);
