@@ -8,4 +8,5 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-void * communication(void * arg);
+void * serverside_communication(void * arg);
+void * clientside_communication(void * arg);

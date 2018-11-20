@@ -24,6 +24,9 @@ int ask_for_operation(){
     else if (strcmp(op, "$sendfile") == 0){
         return SEND_FILE;
     }
+    else if (strcmp(op, "$server") == 0){
+        return SERVER_INFO;
+    }
 
     print_message(FAIL, "No such operation");
 

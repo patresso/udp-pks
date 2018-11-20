@@ -19,8 +19,6 @@ void server(int port){
 
     bind(sockfd, (const struct sockaddr*) &servaddr, sizeof(servaddr));
     if (bind < 0) handle_error("Socket already in use");
-    
-    print_message(OK, "Server started");
 
     pthread_t tid;
     pthread_attr_t attr;
@@ -33,7 +31,7 @@ void server(int port){
     args->cmd = NO_VAL;
 
     //work on this thread
-    pthread_create(&tid, &attr, communication, args);
+    pthread_create(&tid, &attr, serverside_communication, args);
 
     int op;
     for (op = NO_VAL; ; op = ask_for_operation()){

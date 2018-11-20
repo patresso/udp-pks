@@ -4,9 +4,10 @@
 #include "../misc/headers/constants.h"
 #include "../misc/headers/messages.h"
 
-void * communication(void * arg){
+void * serverside_communication(void * arg){
     /*THREAD*/
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
+    print_message(OK, "Server started");
     
     int conn = NO_VAL;
     //main cycle
@@ -34,5 +35,15 @@ void * communication(void * arg){
     }   
 
     
+    pthread_exit(0);
+}
+
+void * clientside_communication(void * arg){
+    /*THREAD*/
+    THREAD_ARGS * args = (THREAD_ARGS*)arg;
+    print_message(OK, "Client started");
+
+    
+
     pthread_exit(0);
 }
