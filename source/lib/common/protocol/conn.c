@@ -43,7 +43,22 @@ void * clientside_communication(void * arg){
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
     print_message(OK, "Client started");
 
-    
+    while (args->flag == RUN){
+
+        //TODO: try to connect 3x for 3 seconds and quit
+
+        if (args->cmd == CHAT){
+            //establish chat
+            print_message(INFO, "should start chat");
+            args->cmd = NO_VAL;
+        }
+        else if (args->cmd == SEND_FILE){
+            //send file
+            print_message(INFO, "should send a file");
+            args->cmd = NO_VAL;
+        }
+
+    }
 
     pthread_exit(0);
 }

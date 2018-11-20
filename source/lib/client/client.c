@@ -35,7 +35,7 @@ void client(in_addr_t addr, int port){
         if (op == NO_VAL) continue;
         switch (op){
             case QUIT:          //send closing message
-                                print_message(INFO, "Shutting down server");
+                                print_message(INFO, "Shutting down client");
                                 args->flag = QUIT;
                                 pthread_join(tid, NULL);
                                 close(sockfd);
