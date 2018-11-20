@@ -8,4 +8,4 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-int ask_for_operation(char * text);
+int ask_for_operation(char * op);

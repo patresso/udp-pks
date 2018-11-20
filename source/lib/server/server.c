@@ -4,13 +4,14 @@
 #include "../common/misc/headers/control.h"
 #include "../common/protocol/headers/connection_threads.h"
 #include "../common/protocol/headers/definitions.h"
+#include "../common/protocol/headers/message_processing.h"
+#include "../common/protocol/headers/send.h"
 
 void server(int port){
 
 
     struct sockaddr_in servaddr, cliaddr; 
 
-    
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) handle_error("File descriptor unavailable");
     
@@ -27,7 +28,7 @@ void server(int port){
 
     THREAD_ARGS * args = (THREAD_ARGS*)malloc(sizeof(THREAD_ARGS)); 
     args->sockfd = sockfd;
-    args->clientaddr = &cliaddr;
+    args->address = &cliaddr;
     args->flag = RUN;
     args->cmd = NO_VAL;
 
@@ -36,13 +37,15 @@ void server(int port){
 
     int op;
     char * text = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
+    fgets(text, 5, stdin);  //for triailing newlines
+    MESSAGE * message;
     for (op = NO_VAL; ; op = ask_for_operation(text)){
         if (op == NO_VAL) continue;
         switch (op){
             case QUIT:          //send closing message
                                 print_message(INFO, "Shutting down server");
                                 args->flag = QUIT;
-                                pthread_join(tid, NULL);
+                                pthread_cancel(tid);
                                 close(sockfd);
                                 exit(EXIT_SUCCESS);
 
@@ -64,8 +67,9 @@ void server(int port){
                                 args->cmd = SEND_FILE;
                                 break;
 
-            default:            args->data = text;
-                                args->cmd = CHAT;
+            case CHAT:          //establish chat
+                                message = create_message(0, ASCII, 0, 0, 0, text, strlen(text));
+                                sendmessage(message, args);
                                 break;
         
         }   

@@ -4,6 +4,8 @@
 #include "../common/misc/headers/control.h"
 #include "../common/protocol/headers/connection_threads.h"
 #include "../common/protocol/headers/definitions.h"
+#include "../common/protocol/headers/message_processing.h"
+#include "../common/protocol/headers/send.h"
 
 
 void client(in_addr_t addr, int port){
@@ -23,7 +25,7 @@ void client(in_addr_t addr, int port){
 
     THREAD_ARGS * args = (THREAD_ARGS*)malloc(sizeof(THREAD_ARGS)); 
     args->sockfd = sockfd;
-    args->serveraddr = &servaddr;
+    args->address = &servaddr;
     args->flag = RUN;
     args->cmd = NO_VAL;
 
@@ -31,13 +33,15 @@ void client(in_addr_t addr, int port){
 
     int op;
     char * text = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
+    fgets(text, 5, stdin);  //for triailing newlines
+    MESSAGE * message;
     for (op = NO_VAL; ; op = ask_for_operation(text)){
         if (op == NO_VAL) continue;
         switch (op){
             case QUIT:          //send closing message
                                 print_message(INFO, "Shutting down client");
                                 args->flag = QUIT;
-                                pthread_join(tid, NULL);
+                                pthread_cancel(tid);
                                 close(sockfd);
                                 exit(EXIT_SUCCESS);
 
@@ -55,17 +59,15 @@ void client(in_addr_t addr, int port){
                                 break;
             
             case CHAT:          //establish chat
-                                args->cmd = CHAT;
+                                // args->data = text;
+                                // args->cmd = CHAT;
+                                message = create_message(0, ASCII, 0, 0, 0, text, strlen(text));
+                                sendmessage(message, args);
                                 break;
             
             case SEND_FILE:     //send a file to client
                                 args->cmd = SEND_FILE;
                                 break;
-
-            default:            args->data = text;
-                                args->cmd = CHAT;
-                                break;
-
         
         }   
     }

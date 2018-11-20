@@ -3,6 +3,8 @@
 #include "../misc/headers/messages.h"
 #include "../protocol/headers/definitions.h"
 #include "headers/recieve.h"
+#include "headers/message_processing.h"
+#include "headers/send.h"
 
 void * serverside_communication(void * arg){
     /*THREAD*/
@@ -20,8 +22,8 @@ void * serverside_communication(void * arg){
 
         if (args->cmd == CHAT){
             //establish chat
-            //propably just sendthis text to other side
-            print_message(INFO, "should start chat");
+            message = create_message(0, ASCII, 0, 0, 0, args->data, strlen(args->data));
+            sendmessage(message, args);
             args->cmd = NO_VAL;
         }
         else if (args->cmd == SEND_FILE){
@@ -40,11 +42,16 @@ void * clientside_communication(void * arg){
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
     print_message(OK, "Client started");
 
+    MESSAGE * message;
     while (args->flag == RUN){
         
+        message = recieve(args);
+        print_message(SERVER, message->data);
+
         if (args->cmd == CHAT){
             //establish chat
-            //just send the data to the other side
+            // message = create_message(0, ASCII, 0, 0, 0, args->data, strlen(args->data));
+            // sendmessage(message, args);
             args->cmd = NO_VAL;
         }
         else if (args->cmd == SEND_FILE){
