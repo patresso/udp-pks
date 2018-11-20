@@ -1,27 +1,25 @@
-#include "headers/conn.h"
-#include "headers/actions.h"
-#include "headers/headers.h"
+#include "headers/connection_threads.h"
 #include "../misc/headers/constants.h"
 #include "../misc/headers/messages.h"
-#include "headers/send_recieve.h"
+#include "../protocol/headers/definitions.h"
 
 void * serverside_communication(void * arg){
     /*THREAD*/
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
-    HEADER_FULL * msg;
+    MESSAGE * msg;
     print_message(OK, "Server started");
     
     int conn = NO_VAL;
     //main cycle
     while(args->flag == RUN){
 
-        // if (conn != OK){
-        //     conn = wait_for_connection(args);
-        //     if (conn == OK)
-        //         print_message(INFO, "Connection established");
-        //     else
-        //         print_message(FAIL, "Communication error");
-        // }
+        if (conn != OK){
+            conn = wait_for_connection(args);
+            if (conn == OK)
+                print_message(INFO, "Connection established");
+            else
+                print_message(FAIL, "Communication error");
+        }
         
         msg = recieve_message(args, SERVER);
 
@@ -29,6 +27,7 @@ void * serverside_communication(void * arg){
 
         if (args->cmd == CHAT){
             //establish chat
+            //propably just sendthis text to other side
             print_message(INFO, "should start chat");
             args->cmd = NO_VAL;
         }
@@ -50,16 +49,10 @@ void * clientside_communication(void * arg){
     print_message(OK, "Client started");
 
     while (args->flag == RUN){
-
-        //3x 3s
-        // establish_connection(args);
-
         
         if (args->cmd == CHAT){
             //establish chat
-            // print_message(INFO, "should start chat");
-            HEADER_FULL * msg = text_to_message(args->data);
-            send_message(args, msg , CLIENT);
+            //just send the data to the other side
             args->cmd = NO_VAL;
         }
         else if (args->cmd == SEND_FILE){

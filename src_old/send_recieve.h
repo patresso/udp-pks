@@ -7,8 +7,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #include "headers.h"
 
-int wait_for_connection(THREAD_ARGS * args);
+// HEADER_FULL * recieve_message(THREAD_ARGS * args, int side);
+// int send_message(THREAD_ARGS * args, HEADER_FULL * msg, int side);

@@ -1,14 +1,14 @@
 #include "headers/server.h"
 #include "../common/misc/headers/messages.h"
 #include "../common/misc/headers/constants.h"
-#include "../common/protocol/headers/actions.h"
 #include "../common/misc/headers/control.h"
-#include "../common/protocol/headers/conn.h"
-#include "../common/protocol/headers/headers.h"
+#include "../common/protocol/headers/connection_threads.h"
 
 void server(int port){
 
+
     struct sockaddr_in servaddr, cliaddr; 
+
     
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) handle_error("File descriptor unavailable");
