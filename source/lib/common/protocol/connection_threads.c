@@ -2,16 +2,21 @@
 #include "../misc/headers/constants.h"
 #include "../misc/headers/messages.h"
 #include "../protocol/headers/definitions.h"
+#include "headers/recieve.h"
 
 void * serverside_communication(void * arg){
     /*THREAD*/
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
     print_message(OK, "Server started");
 
+    MESSAGE * message;
+    char * text;
     //main cycle
     while(args->flag == RUN){
 
         //recieve message and print it
+        message = recieve(args);
+        print_message(CLIENT, message->data);
 
         if (args->cmd == CHAT){
             //establish chat

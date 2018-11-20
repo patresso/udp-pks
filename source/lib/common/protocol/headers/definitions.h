@@ -34,8 +34,7 @@ typedef struct message{
 
 typedef struct thread_args{
     int sockfd;
-    struct sockaddr_in * serveraddr;
-    struct sockaddr_in * clientaddr;
+    struct sockaddr_in * address;
     int flag;
     int cmd;
     char * data;

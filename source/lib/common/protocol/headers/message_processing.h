@@ -9,5 +9,3 @@
 #include <unistd.h>
 #include <pthread.h>
 
-void * serverside_communication(void * arg);
-void * clientside_communication(void * arg);

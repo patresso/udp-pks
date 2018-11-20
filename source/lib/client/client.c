@@ -1,10 +1,9 @@
 #include "headers/client.h"
 #include "../common/misc/headers/messages.h"
 #include "../common/misc/headers/constants.h"
-#include "../common/protocol/headers/actions.h"
 #include "../common/misc/headers/control.h"
-#include "../common/protocol/headers/conn.h"
-#include "../common/protocol/headers/headers.h"
+#include "../common/protocol/headers/connection_threads.h"
+#include "../common/protocol/headers/definitions.h"
 
 
 void client(in_addr_t addr, int port){
