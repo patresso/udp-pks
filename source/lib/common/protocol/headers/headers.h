@@ -43,4 +43,6 @@ typedef struct thread_args{
 
 #endif
 
-HEADER_FULL * parse_message(void * data);
+HEADER_FULL * parse_message_from_bytes(void * data);
+HEADER_FULL * text_to_message(void * data);
+unsigned char * convert_to_bytes(HEADER_FULL * msg);

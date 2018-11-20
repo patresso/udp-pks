@@ -1,5 +1,6 @@
 #include "headers/headers.h"
 #include "../misc/headers/constants.h"
+#include "../misc/headers/crc.h"
 
 //funkcie nad mojimi hlavickami 
 HEADER_FULL * parse_message_from_bytes(void * data){
@@ -29,11 +30,27 @@ HEADER_FULL * parse_message_from_bytes(void * data){
 
 }
 
-HEADER_FULL * parse_bytes_to_message(void * data){
+HEADER_FULL * text_to_message(void * data){
     HEADER_FULL * msg = calloc(1, sizeof(HEADER_FULL));
 
-    //TODO:
+    msg->checksum = 0;
+    msg->data = (char*)data;
+    msg->message_type = ASCII;
+    msg->data_length = strlen(data);
 
+    //TODO: not done
 
     return msg;
+}
+
+unsigned char * convert_to_bytes(HEADER_FULL * msg){
+    char * bytes = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
+
+    *(u_int16_t*)bytes = msg->checksum;
+    *(u_int8_t*)(bytes+2) = msg->message_type;
+    *(FLAGS*)(bytes+3) = msg->flags;
+    *(u_int16_t*)(bytes+4) = msg->data_length;
+    memcpy((void*)(bytes+6), msg->data, msg->data_length);
+
+    return bytes;
 }

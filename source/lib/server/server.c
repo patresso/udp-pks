@@ -68,6 +68,7 @@ void server(int port){
                                 args->cmd = SEND_FILE;
                                 break;
             default:            args->data = text;
+                                
                                 break;
         
         }   

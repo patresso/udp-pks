@@ -23,7 +23,7 @@ void * serverside_communication(void * arg){
         //         print_message(FAIL, "Communication error");
         // }
         
-        msg = recieve_message(args);
+        msg = recieve_message(args, SERVER);
 
         print_message(CLIENT, msg->data);
 
@@ -57,8 +57,8 @@ void * clientside_communication(void * arg){
         
         if (args->cmd == CHAT){
             //establish chat
-            print_message(INFO, "should start chat");
-            HEADER_FULL * msg = convert_to_text_message(args->data);
+            // print_message(INFO, "should start chat");
+            HEADER_FULL * msg = text_to_message(args->data);
             send_message(args, msg , CLIENT);
             args->cmd = NO_VAL;
         }
