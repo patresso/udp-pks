@@ -6,24 +6,12 @@
 void * serverside_communication(void * arg){
     /*THREAD*/
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
-    MESSAGE * msg;
     print_message(OK, "Server started");
-    
-    int conn = NO_VAL;
+
     //main cycle
     while(args->flag == RUN){
 
-        if (conn != OK){
-            conn = wait_for_connection(args);
-            if (conn == OK)
-                print_message(INFO, "Connection established");
-            else
-                print_message(FAIL, "Communication error");
-        }
-        
-        msg = recieve_message(args, SERVER);
-
-        print_message(CLIENT, msg->data);
+        //recieve message and print it
 
         if (args->cmd == CHAT){
             //establish chat
@@ -39,7 +27,6 @@ void * serverside_communication(void * arg){
 
     }   
 
-    
     pthread_exit(0);
 }
 

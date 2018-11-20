@@ -3,6 +3,7 @@
 #include "../common/misc/headers/constants.h"
 #include "../common/misc/headers/control.h"
 #include "../common/protocol/headers/connection_threads.h"
+#include "../common/protocol/headers/definitions.h"
 
 void server(int port){
 
@@ -58,17 +59,13 @@ void server(int port){
                                 print_message(INFO, "Not yet implemented");
                                 break;
             
-            case CHAT:          //establish chat
-                                print_message(INFO, "Not yet implemented");
-                                args->cmd = CHAT;
-                                break;
-            
             case SEND_FILE:     //send a file to client
                                 print_message(INFO, "Not yet implemented");
                                 args->cmd = SEND_FILE;
                                 break;
+
             default:            args->data = text;
-                                
+                                args->cmd = CHAT;
                                 break;
         
         }   
