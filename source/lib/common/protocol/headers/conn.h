@@ -7,6 +7,5 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <pthread.h>
 
-void server(int port);
+void * communication(void * arg);

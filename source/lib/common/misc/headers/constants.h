@@ -16,3 +16,17 @@
 #define GREEN "\033[0;32m"
 #define BLUE "\033[0;36m"
 #define RED "\033[0;31m"
+
+//defaults
+#define DEFAULT_FRAGMENT_MAX_SIZE 1400
+
+//operation constants
+#define QUIT 0
+#define DISCONNECT 1
+#define CLIENT_INFO 2
+#define STATISTICS 3
+#define CHAT 4
+#define SEND_FILE 5
+
+//thread manipulation
+#define RUN 1

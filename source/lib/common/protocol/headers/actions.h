@@ -9,4 +9,3 @@
 #include <unistd.h>
 #include <pthread.h>
 
-void server(int port);
