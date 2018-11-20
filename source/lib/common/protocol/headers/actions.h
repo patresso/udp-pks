@@ -9,3 +9,6 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#include "headers.h"
+
+int wait_for_connection(THREAD_ARGS * args);

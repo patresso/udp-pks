@@ -20,7 +20,6 @@ void * communication(void * arg){
                 print_message(FAIL, "Communication error");
         }
 
-
         if (args->cmd == CHAT){
             //establish chat
             print_message(INFO, "should start chat");

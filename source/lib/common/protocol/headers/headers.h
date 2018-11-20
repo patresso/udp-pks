@@ -8,6 +8,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#ifndef HEADERS_H
+#define HEADERS_H
+
 typedef struct {
     u_int8_t start:1;
     u_int8_t ack:1;
@@ -51,3 +54,5 @@ typedef struct thread_args{
     int cmd;
     char * data;
 }THREAD_ARGS;   
+
+#endif
