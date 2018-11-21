@@ -46,6 +46,7 @@ typedef struct thread_args{
     int conn_state;
     int frag_size;
     BROKEN_LIST * broken;
+    int num_of_broken_messages;
 }THREAD_ARGS;
 
 typedef struct file_info{

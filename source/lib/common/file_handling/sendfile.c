@@ -48,6 +48,10 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
         iterator = iterator->next;
         memcpy(fragment_buffer, buffer+(i*args->frag_size), args->frag_size);
         iterator->message = create_message(MSGID, BINARY, 1, i, frag_count, fragment_buffer, (i+1 == frag_count)?(file_len%args->frag_size):(args->frag_size) );
+        if (args->num_of_broken_messages > 0) {
+            iterator->message->checksum = 0xFFFF;
+            args->num_of_broken_messages--;
+        }
     }
     iterator->next == NULL;
 

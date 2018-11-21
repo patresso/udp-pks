@@ -60,3 +60,12 @@ char * ask_for_filename(void){
 
     return filename;
 }
+
+int ask_for_num_of_broken(void){
+
+    printf("Number of broken messages:\n");
+    int x;
+    scanf("%d", &x);
+
+    return x;
+}

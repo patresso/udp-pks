@@ -28,6 +28,7 @@
 #define CHAT 4
 #define SEND_FILE 5
 #define SERVER_INFO 6
+#define SEND_FILE_BR 7
 
 //thread manipulation
 #define RUN 1

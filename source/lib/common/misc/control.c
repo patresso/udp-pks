@@ -36,6 +36,9 @@ int ask_for_operation(char * op){
         op[0] = '\0';
         return SERVER_INFO;
     }
+    else if (strcmp(op, "$sendbrokenfile") == 0){
+        return SEND_FILE_BR;
+    }
     else{
         return CHAT;
     }
