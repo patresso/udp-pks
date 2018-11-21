@@ -44,6 +44,11 @@ void * serverside_communication(void * arg){
                 print_message(OK, "File sent");
                 args->cmd = NO_VAL;
             }
+            else if (args->cmd == DISCONNECT && message->flags.finnish == 1 & message->flags.ack == 1){
+                args->conn_state = NOT_CONNECTED;
+                args->cmd = NO_VAL;
+                print_message(OK, "Disconnected");
+            }
 
         }
 
@@ -117,6 +122,11 @@ void * clientside_communication(void * arg){
                 sendfile(message, args);
                 print_message(OK, "File sent");
                 args->cmd = NO_VAL;
+            }
+            else if (message->flags.finnish == 1){
+                sendmessage(create_message(FIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
+                print_message(OK, "Disconnected by server");
+                exit(EXIT_SUCCESS);
             }
 
         }

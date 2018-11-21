@@ -79,6 +79,7 @@ void client(in_addr_t addr, int port){
                                 fgets(text, 10, stdin);
                                 sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
                                 args->data = filename;
+                                args->num_of_broken_messages = 0;
                                 args->cmd = SEND_FILE;
                                 break;
             

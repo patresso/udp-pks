@@ -37,7 +37,8 @@ void server(int port){
 
     //work on this thread
     pthread_create(&tid, &attr, serverside_communication, args);
-
+    char * filename;
+    char * fragsize;
     int op;
     char * text = calloc(sizeof(char), DEFAULT_FRAGMENT_MAX_SIZE);
     fgets(text, 5, stdin);  //for triailing newlines
@@ -54,8 +55,8 @@ void server(int port){
 
             case DISCONNECT:    print_message(INFO, "Not yet implemented");
                                 //send closing message
-                                //do all closings
-                                //goto up
+                                sendmessage(create_message(FIN, NO_DATA, 0, 0, 0, NULL, 0), args);
+                                args->cmd = DISCONNECT;
                                 break;
 
             case STATISTICS:    print_message(INFO, "Not yet implemented");
@@ -70,11 +71,12 @@ void server(int port){
                                     print_message(FAIL, "Not connected");
                                     break;
                                 }
-                                char * filename = ask_for_filename();
-                                char * fragsize = ask_for_fragment_size(args);
+                                filename = ask_for_filename();
+                                fragsize = ask_for_fragment_size(args);
                                 fgets(text, 10, stdin);
                                 sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
                                 args->data = filename;
+                                args->num_of_broken_messages = 0;
                                 args->cmd = SEND_FILE;
                                 break;
 
@@ -84,6 +86,19 @@ void server(int port){
                                     break;
                                 }
                                 sendmessage(create_message(0, ASCII, 0, 0, 0, text, strlen(text)), args);
+                                break;
+
+            case SEND_FILE_BR:  if (args->conn_state == NOT_CONNECTED){
+                                    print_message(FAIL, "Not connected");
+                                    break;
+                                }
+                                filename = ask_for_filename();
+                                fragsize = ask_for_fragment_size(args);
+                                args->num_of_broken_messages = ask_for_num_of_broken();
+                                fgets(text, 10, stdin);
+                                sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
+                                args->data = filename;
+                                args->cmd = SEND_FILE;
                                 break;
         
         }   
