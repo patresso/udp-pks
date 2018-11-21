@@ -70,23 +70,24 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     //send filename
     iterator = first_filename;
     while (iterator != NULL){
-        usleep(20000);
-        // sleep(1);
+        usleep(1000);
         sendmessage(iterator->message, args);
-        print_message(INFO, "Sending filename fragment");
         iterator = iterator->next;
     }
-
 
     //send file
+    // int counter = 0;
+    // int frac = (frag_count < 25)?(1):(frag_count/25);
+    // printf("<");
     iterator = first;
     while (iterator != NULL){
-        usleep(20000);
-        // sleep(1);
+        usleep(1000);
         sendmessage(iterator->message, args);
-        print_message(INFO, "Sending fragment");
+        // counter++;
+        // if (counter%frac == 0) printf("=");
         iterator = iterator->next;
     }
+    // printf(">\n");
 
     //place for resend mechanism
 

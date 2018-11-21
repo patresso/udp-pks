@@ -105,7 +105,7 @@ void * clientside_communication(void * arg){
                 //start recieving a file
                 print_message(INFO, "Recieving a file");
                 sendmessage(create_message(STRIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
-                // recievefile(message);
+                recievefile(message, args);
                 print_message(OK, "Download complete");
             }
              else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
