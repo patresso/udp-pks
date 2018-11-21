@@ -19,8 +19,6 @@ void * serverside_communication(void * arg){
 
         //recieve message
         message = recieve(args);
-        
-        // print_message(CLIENT, message->data);
 
         //protocol
         if (args->conn_state == CONNECTED){
@@ -28,6 +26,12 @@ void * serverside_communication(void * arg){
             //chat
             if (message->message_type == ASCII){
                 print_message(CLIENT, message->data);
+            }
+            else if (message->flags.stream_income == 1){
+                //start recieving a file
+                print_message(INFO, "Recieving a file");
+                recievefile(message);
+                print_message(OK, "Download complete");
             }
 
         }
@@ -88,22 +92,21 @@ void * clientside_communication(void * arg){
 
         //protocol
         if (args->conn_state == CONNECTED){
-            //daco
+            //recieve message
             message = recieve(args);
 
             //chat
             if (message->message_type == ASCII){
                 print_message(SERVER, message->data);
             }
+            else if (message->flags.stream_income == 1){
+                //start recieving a file
+                print_message(INFO, "Recieving a file");
+                recievefile(message);
+                print_message(OK, "Download complete");
+            }
 
         }
-
-        if (args->cmd == SEND_FILE){
-            //send file
-            print_message(INFO, "should send a file");
-            args->cmd = NO_VAL;
-        }
-        
 
     }
 

@@ -41,4 +41,16 @@ typedef struct thread_args{
     int conn_state;
 }THREAD_ARGS;
 
+typedef struct file_info{
+    u_int32_t size;
+    char * filename;
+    u_int32_t fragment_size;
+}FILE_INFORMATION;
+
+typedef struct fragment{
+    int fragments[2];
+    void * data;
+    struct fragment * next;
+}FRAGMENT;
+
 #endif

@@ -65,7 +65,10 @@ void server(int port){
                                 break;
             
             case SEND_FILE:     //send a file to client
-                                print_message(INFO, "Not yet implemented");
+                                if (args->conn_state == NOT_CONNECTED){
+                                    print_message(FAIL, "Not connected");
+                                    break;
+                                }
                                 args->cmd = SEND_FILE;
                                 break;
 

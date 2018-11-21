@@ -68,7 +68,11 @@ void client(in_addr_t addr, int port){
                                 sendmessage(message, args);
                                 break;
             
-            case SEND_FILE:     //send a file to client
+            case SEND_FILE:     //send a file to server
+                                if (args->conn_state == NOT_CONNECTED){
+                                    print_message(FAIL, "Not connected");
+                                    break;
+                                }
                                 args->cmd = SEND_FILE;
                                 break;
         
