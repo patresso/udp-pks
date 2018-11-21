@@ -27,11 +27,11 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     fclose(fd); 
 
     //number of fragments
-    int frag_count = (file_len / args->frag_size);
-    if ((file_len % args->frag_size) != 0) frag_count += 1;
+    int frag_count = (file_len / args->frag_size)+1;
+    // if ((file_len % args->frag_size) != 0) frag_count += 1;
 
     int filename_fragment_count = (strlen(args->data) / args->frag_size);
-    if ( + (strlen(args->data) % args->frag_size) != 0) filename_fragment_count += 1;
+    if ((strlen(args->data) % args->frag_size) != 0) filename_fragment_count += 1;
     
 
     //process file to send
@@ -76,20 +76,25 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     }
 
     //send file
-    // int counter = 0;
-    // int frac = (frag_count < 25)?(1):(frag_count/25);
-    // printf("<");
     iterator = first;
     while (iterator != NULL){
-        usleep(1000);
+        usleep(800);
         sendmessage(iterator->message, args);
-        // counter++;
-        // if (counter%frac == 0) printf("=");
         iterator = iterator->next;
     }
-    // printf(">\n");
 
     //place for resend mechanism
+    message = recieve(args);
+    iterator = first;
+    while (message->flags.stream_end == 0 && message->flags.ack == 0){
+        //could be only resend message
+        while (iterator->message->sequence_number != message->sequence_number){
+            iterator = iterator->next;
+        }
+        sendmessage(iterator->message, args);
+        message = recieve(args);
+    }
+
 
     free(filename);
     free(buffer);

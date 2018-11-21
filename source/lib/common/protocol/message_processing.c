@@ -2,12 +2,12 @@
 #include "headers/definitions.h"
 #include "../misc/headers/constants.h"
 #include "../misc/headers/messages.h"
+#include "../misc/headers/crc.h"
 
 MESSAGE * create_message(u_int8_t flags, int message_type, int stream_id, int sequence_number, int fragment_count, char * data, int data_length){
 
     MESSAGE * new = calloc(1, sizeof(MESSAGE));
 
-    new->checksum = 0;
     new->message_type = message_type;
     // memcpy(&(new->flags), &flags, 1);
     new->flags.ack = (flags & ACK) >> 6;
@@ -25,6 +25,8 @@ MESSAGE * create_message(u_int8_t flags, int message_type, int stream_id, int se
         new->data = calloc(data_length, sizeof(char));
         memcpy(new->data, data, data_length);
     }
+
+    new->checksum = crc16(data, data_length);
     
     return new;
 
@@ -77,4 +79,17 @@ char * parse_to_bytes(MESSAGE * msg){
     }
 
     return bytes;
+}
+
+void addtolist(MESSAGE * message, THREAD_ARGS * args){
+
+    BROKEN_LIST * node = args->broken;
+
+    while(node != NULL){
+        node = node->next;
+    }
+
+    node->message = message;
+    return;
+
 }

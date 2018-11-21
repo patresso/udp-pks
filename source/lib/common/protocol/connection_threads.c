@@ -33,8 +33,10 @@ void * serverside_communication(void * arg){
                 //start recieving a file
                 print_message(INFO, "Recieving a file");
                 sendmessage(create_message(STRIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
-                recievefile(message, args);
-                print_message(OK, "Download complete");
+                if (recievefile(message, args) == 0)
+                    print_message(OK, "Download complete");
+                else
+                    print_message(FAIL, "Download unsuccessful");
             }
             else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
                 print_message(INFO, "Sending a file");
@@ -105,8 +107,10 @@ void * clientside_communication(void * arg){
                 //start recieving a file
                 print_message(INFO, "Recieving a file");
                 sendmessage(create_message(STRIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
-                recievefile(message, args);
-                print_message(OK, "Download complete");
+                if (recievefile(message, args) == 0)
+                    print_message(OK, "Download complete");
+                else
+                    print_message(FAIL, "Download unsuccessful");
             }
              else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
                 print_message(INFO, "Sending a file");

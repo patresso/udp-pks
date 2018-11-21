@@ -3,6 +3,7 @@
 #include "../misc/headers/constants.h"
 #include "headers/message_processing.h"
 #include "../misc/headers/messages.h"
+#include "../misc/headers/crc.h"
 
 MESSAGE * recieve(THREAD_ARGS * args){
 
@@ -13,6 +14,12 @@ MESSAGE * recieve(THREAD_ARGS * args){
     if (n < 0) print_message(FAIL, "Message not recieved properly");
 
     MESSAGE * new = parse_from_bytes(buffer);
+
+    // if (check_integrity(new) != OK){
+    //     addtolist(new, args->broken);
+    // }
+
+    if (check_integrity(new) != OK) new->checksum = 0;
 
     return new;
 }

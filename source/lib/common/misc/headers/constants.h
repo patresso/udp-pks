@@ -52,3 +52,6 @@
 //connection states
 #define NOT_CONNECTED 0
 #define CONNECTED     1
+
+//crc
+#define BROKEN 1

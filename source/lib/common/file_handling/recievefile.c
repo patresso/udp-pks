@@ -38,8 +38,8 @@ int recievefile(MESSAGE * message, THREAD_ARGS * args){
         iterator->next = calloc(1, sizeof(FRAGMENT));
         iterator = iterator->next;
         iterator->message = message;
-        iterator->fragments[0] = i;
-        iterator->fragments[1] = i;
+        iterator->fragments[0] = message->sequence_number;
+        iterator->fragments[1] = message->sequence_number;
         iterator->next = NULL;
     }
 
@@ -52,7 +52,21 @@ int recievefile(MESSAGE * message, THREAD_ARGS * args){
         return 1;
     }
 
-    //simple assemly of ok fragments
+    //message integrity test
+    iterator = first;
+    while(iterator != NULL){
+        if (iterator->message->checksum == 0){
+            //resend
+            sendmessage(create_message(MSGID|RESEND, BINARY, 1, iterator->message->sequence_number, iterator->message->fragment_count, NULL, 0 ), args);
+            message = recieve(args);
+            iterator->message = message;
+        }
+        iterator = iterator->next;
+    }
+
+    sendmessage(create_message(END|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
+
+    //simple assembly of ok fragments
     iterator = first;
     int i = 0;
     while(iterator != NULL){

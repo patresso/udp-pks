@@ -32,6 +32,11 @@ typedef struct message{
     char * data;
 }MESSAGE;
 
+typedef struct broken_list{
+    MESSAGE * message;
+    struct broken_list * next;
+}BROKEN_LIST;
+
 typedef struct thread_args{
     int sockfd;
     struct sockaddr_in * address;
@@ -40,6 +45,7 @@ typedef struct thread_args{
     char * data;
     int conn_state;
     int frag_size;
+    BROKEN_LIST * broken;
 }THREAD_ARGS;
 
 typedef struct file_info{
