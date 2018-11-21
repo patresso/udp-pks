@@ -7,6 +7,7 @@
 #include "../common/protocol/headers/message_processing.h"
 #include "../common/protocol/headers/send.h"
 #include "../common/protocol/headers/recieve.h"
+#include "../common/misc/headers/intro.h"
 
 void server(int port){
 
@@ -69,7 +70,10 @@ void server(int port){
                                     print_message(FAIL, "Not connected");
                                     break;
                                 }
-                                sendmessage(create_message(STRIN, NO_DATA, 0, 0, 0, NULL, 0), args);
+                                char * filename = ask_for_filename();
+                                char * fragsize = ask_for_fragment_size(args);
+                                sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
+                                args->data = filename;
                                 args->cmd = SEND_FILE;
                                 break;
 

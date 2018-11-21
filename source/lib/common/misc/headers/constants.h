@@ -37,7 +37,8 @@
 #define NO_DATA 0
 #define BINARY 1
 #define ASCII 2
-#define FILE_INFO 3
+#define FRAG_SIZE 3
+#define FILENAME 4
 
 //flags
 #define START   0b10000000

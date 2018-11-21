@@ -39,6 +39,7 @@ typedef struct thread_args{
     int cmd;
     char * data;
     int conn_state;
+    int frag_size;
 }THREAD_ARGS;
 
 typedef struct file_info{
@@ -49,7 +50,7 @@ typedef struct file_info{
 
 typedef struct fragment{
     int fragments[2];
-    void * data;
+    MESSAGE * message;
     struct fragment * next;
 }FRAGMENT;
 

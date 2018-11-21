@@ -1,4 +1,5 @@
 #include "headers/intro.h"
+#include "../protocol/headers/definitions.h"
 
 int intro(){
 
@@ -37,4 +38,25 @@ in_addr_t ask_for_addr(void){
     in_addr_t addr = inet_addr(address);
 
     return addr;
+}
+
+char * ask_for_fragment_size(THREAD_ARGS * args){
+
+    printf("Type max fragment size: [1 - 1400]\n");
+    int size;
+    scanf("%d", &size);
+    args->frag_size = size;
+    char * size_buf = calloc(20, sizeof(char));
+    sprintf(size_buf, "%d", size);
+
+    return size_buf;
+}
+
+char * ask_for_filename(void){
+
+    printf("Filename:\n");
+    char * filename = calloc(255, sizeof(char));
+    scanf("%s", filename);
+
+    return filename;
 }
