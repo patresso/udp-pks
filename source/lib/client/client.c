@@ -6,7 +6,7 @@
 #include "../common/protocol/headers/definitions.h"
 #include "../common/protocol/headers/message_processing.h"
 #include "../common/protocol/headers/send.h"
-
+#include "../common/misc/headers/intro.h"
 
 void client(in_addr_t addr, int port){
 
@@ -73,7 +73,11 @@ void client(in_addr_t addr, int port){
                                     print_message(FAIL, "Not connected");
                                     break;
                                 }
-                                sendmessage(create_message(STRIN, NO_DATA, 0, 0, 0, NULL, 0), args);
+                                char * filename = ask_for_filename();
+                                char * fragsize = ask_for_fragment_size(args);
+                                fgets(text, 10, stdin);
+                                sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
+                                args->data = filename;
                                 args->cmd = SEND_FILE;
                                 break;
         

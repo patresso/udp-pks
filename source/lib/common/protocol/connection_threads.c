@@ -110,7 +110,7 @@ void * clientside_communication(void * arg){
             }
              else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
                 print_message(INFO, "Sending a file");
-                // sendfile();
+                sendfile(message, args);
                 print_message(OK, "File sent");
                 args->cmd = NO_VAL;
             }

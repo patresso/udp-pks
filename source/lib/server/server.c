@@ -72,6 +72,7 @@ void server(int port){
                                 }
                                 char * filename = ask_for_filename();
                                 char * fragsize = ask_for_fragment_size(args);
+                                fgets(text, 10, stdin);
                                 sendmessage(create_message(STRIN, FRAG_SIZE, 0, 0, 0, fragsize, strlen(fragsize)), args);
                                 args->data = filename;
                                 args->cmd = SEND_FILE;

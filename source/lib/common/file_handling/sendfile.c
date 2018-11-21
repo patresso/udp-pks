@@ -29,10 +29,9 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     //number of fragments
     int frag_count = (file_len / args->frag_size);
     if ((file_len % args->frag_size) != 0) frag_count += 1;
-    // printf("frags: %d, %d, %d\n", frag_count, (file_len / args->frag_size), (file_len % args->frag_size));
+
     int filename_fragment_count = (strlen(args->data) / args->frag_size);
     if ( + (strlen(args->data) % args->frag_size) != 0) filename_fragment_count += 1;
-    // printf("filename: %d\n", filename_fragment_count)
 
     //process file to send
         // make fragments into linked list
@@ -57,7 +56,7 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     first_filename->message = create_message(MSGID, FILENAME, 1, 0, filename_fragment_count, fragment_buffer, args->frag_size);
     iterator = first_filename;
     
-    for (int i = 0; i < filename_fragment_count; i++){
+    for (int i = 1; i < filename_fragment_count; i++){
         iterator->next = calloc(1, sizeof(FRAGMENT));
         iterator = iterator->next;
         memcpy(fragment_buffer, args->data+(i*args->frag_size), args->frag_size);
@@ -85,6 +84,10 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     }
 
     //place for resend mechanism
+
+    free(filename);
+    free(buffer);
+    free(fragment_buffer);
 
     return OK;
 }
