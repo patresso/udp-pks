@@ -73,6 +73,7 @@ void client(in_addr_t addr, int port){
                                     print_message(FAIL, "Not connected");
                                     break;
                                 }
+                                sendmessage(create_message(STRIN, NO_DATA, 0, 0, 0, NULL, 0), args);
                                 args->cmd = SEND_FILE;
                                 break;
         

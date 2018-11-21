@@ -5,6 +5,8 @@
 #include "headers/recieve.h"
 #include "headers/message_processing.h"
 #include "headers/send.h"
+#include "../file_handling/headers/recievefile.h"
+#include "../file_handling/headers/sendfile.h"
 
 void * serverside_communication(void * arg){
     /*THREAD*/
@@ -27,11 +29,18 @@ void * serverside_communication(void * arg){
             if (message->message_type == ASCII){
                 print_message(CLIENT, message->data);
             }
-            else if (message->flags.stream_income == 1){
+            else if (message->flags.stream_income == 1 && args->cmd != SEND_FILE){
                 //start recieving a file
                 print_message(INFO, "Recieving a file");
+                sendmessage(create_message(STRIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
                 recievefile(message);
                 print_message(OK, "Download complete");
+            }
+            else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
+                print_message(INFO, "Sending a file");
+                // sendfile();
+                print_message(OK, "File sent");
+                args->cmd = NO_VAL;
             }
 
         }
@@ -46,13 +55,6 @@ void * serverside_communication(void * arg){
             else{
                 print_message(FAIL, "Connection fail");
             }
-        }
-
-        //commands from console
-        if (args->cmd != NO_VAL && args->conn_state == NOT_CONNECTED){
-            //send file
-            print_message(FAIL, "Not connected");
-            args->cmd = NO_VAL;
         }
 
     }   
@@ -99,11 +101,18 @@ void * clientside_communication(void * arg){
             if (message->message_type == ASCII){
                 print_message(SERVER, message->data);
             }
-            else if (message->flags.stream_income == 1){
+            else if (message->flags.stream_income == 1 && args->cmd != SEND_FILE){
                 //start recieving a file
                 print_message(INFO, "Recieving a file");
-                recievefile(message);
+                sendmessage(create_message(STRIN|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
+                // recievefile(message);
                 print_message(OK, "Download complete");
+            }
+             else if (args->cmd == SEND_FILE && message->flags.stream_income == 1 && message->flags.ack == 1){
+                print_message(INFO, "Sending a file");
+                // sendfile();
+                print_message(OK, "File sent");
+                args->cmd = NO_VAL;
             }
 
         }

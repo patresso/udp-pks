@@ -7,3 +7,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include "../../protocol/headers/definitions.h"
+
+
+int recievefile(MESSAGE * message);

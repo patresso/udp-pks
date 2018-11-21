@@ -9,8 +9,6 @@
 int recievefile(MESSAGE * message){
 
     FILE_INFORMATION info;
-     
-
-
+    
     return OK;
 }
