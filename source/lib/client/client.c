@@ -28,6 +28,7 @@ void client(in_addr_t addr, int port){
     args->address = &servaddr;
     args->flag = RUN;
     args->cmd = NO_VAL;
+    args->conn_state = NOT_CONNECTED;
 
     pthread_create(&tid, &attr, clientside_communication, args); 
 
@@ -59,8 +60,10 @@ void client(in_addr_t addr, int port){
                                 break;
             
             case CHAT:          //establish chat
-                                // args->data = text;
-                                // args->cmd = CHAT;
+                                if (args->conn_state == NOT_CONNECTED){
+                                    print_message(FAIL, "Not connected");
+                                    break;
+                                }
                                 message = create_message(0, ASCII, 0, 0, 0, text, strlen(text));
                                 sendmessage(message, args);
                                 break;

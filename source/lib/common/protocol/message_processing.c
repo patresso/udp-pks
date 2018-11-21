@@ -9,14 +9,23 @@ MESSAGE * create_message(u_int8_t flags, int message_type, int stream_id, int se
 
     new->checksum = 0;
     new->message_type = message_type;
-    memcpy(&(new->flags), &flags, 1);
+    // memcpy(&(new->flags), &flags, 1);
+    new->flags.ack = (flags & ACK) >> 6;
+    new->flags.finnish = (flags & FIN) >> 5;
+    new->flags.message_id = (flags & MSGID) >> 4;
+    new->flags.resend = (flags & RESEND) >> 2;
+    new->flags.start = (flags & START) >> 7;
+    new->flags.stream_end = (flags & END) >> 1;
+    new->flags.stream_income = (flags & STRIN) >> 3;
     new->data_length = data_length;
     new->message_stream_id = stream_id;
     new->sequence_number = sequence_number;
     new->fragment_count = fragment_count;
-    new->data = calloc(data_length, sizeof(char));
-    memcpy(new->data, data, data_length);
-
+    if (data != NULL){
+        new->data = calloc(data_length, sizeof(char));
+        memcpy(new->data, data, data_length);
+    }
+    
     return new;
 
 }

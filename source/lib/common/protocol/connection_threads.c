@@ -10,25 +10,44 @@ void * serverside_communication(void * arg){
     /*THREAD*/
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
     print_message(OK, "Server started");
+    print_message(INFO, "Waiting for connection");
 
     MESSAGE * message;
-    char * text;
+    args->conn_state = NOT_CONNECTED;
     //main cycle
     while(args->flag == RUN){
 
-        //recieve message and print it
+        //recieve message
         message = recieve(args);
-        print_message(CLIENT, message->data);
+        
+        // print_message(CLIENT, message->data);
 
-        if (args->cmd == CHAT){
-            //establish chat
-            message = create_message(0, ASCII, 0, 0, 0, args->data, strlen(args->data));
-            sendmessage(message, args);
-            args->cmd = NO_VAL;
+        //protocol
+        if (args->conn_state == CONNECTED){
+            
+            //chat
+            if (message->message_type == ASCII){
+                print_message(CLIENT, message->data);
+            }
+
         }
-        else if (args->cmd == SEND_FILE){
+
+        if (args->conn_state == NOT_CONNECTED && message->flags.start == 1){
+            sendmessage(create_message((ACK), NO_DATA, 0, 0, 0, NULL, 0), args);
+            message = recieve(args);
+            if (message->flags.ack == 1){
+                print_message(OK, "Connected");
+                args->conn_state = CONNECTED;
+            }
+            else{
+                print_message(FAIL, "Connection fail");
+            }
+        }
+
+        //commands from console
+        if (args->cmd != NO_VAL && args->conn_state == NOT_CONNECTED){
             //send file
-            print_message(INFO, "should send a file");
+            print_message(FAIL, "Not connected");
             args->cmd = NO_VAL;
         }
 
@@ -42,19 +61,44 @@ void * clientside_communication(void * arg){
     THREAD_ARGS * args = (THREAD_ARGS*)arg;
     print_message(OK, "Client started");
 
+    int err_count = 0;
+
     MESSAGE * message;
     while (args->flag == RUN){
         
-        message = recieve(args);
-        print_message(SERVER, message->data);
-
-        if (args->cmd == CHAT){
-            //establish chat
-            // message = create_message(0, ASCII, 0, 0, 0, args->data, strlen(args->data));
-            // sendmessage(message, args);
-            args->cmd = NO_VAL;
+        if (err_count == 3){
+            print_message(FAIL, "3. attemp failed, exiting");
+            exit(EXIT_FAILURE);
         }
-        else if (args->cmd == SEND_FILE){
+
+        if (args->conn_state == NOT_CONNECTED){
+            print_message(INFO, "Trying to connect");
+            sendmessage(create_message(START, NO_DATA, 0, 0, 0, NULL, 0), args);
+            message = recieve(args);
+            if (message->flags.ack == 1){
+                sendmessage(create_message(START|ACK, NO_DATA, 0, 0, 0, NULL, 0), args);
+                print_message(OK, "Connected");
+                args->conn_state = CONNECTED;
+                err_count = 0;
+            }
+            else{
+                err_count++;
+            }
+        }
+
+        //protocol
+        if (args->conn_state == CONNECTED){
+            //daco
+            message = recieve(args);
+
+            //chat
+            if (message->message_type == ASCII){
+                print_message(SERVER, message->data);
+            }
+
+        }
+
+        if (args->cmd == SEND_FILE){
             //send file
             print_message(INFO, "should send a file");
             args->cmd = NO_VAL;

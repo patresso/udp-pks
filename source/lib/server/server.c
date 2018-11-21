@@ -6,6 +6,7 @@
 #include "../common/protocol/headers/definitions.h"
 #include "../common/protocol/headers/message_processing.h"
 #include "../common/protocol/headers/send.h"
+#include "../common/protocol/headers/recieve.h"
 
 void server(int port){
 
@@ -31,6 +32,7 @@ void server(int port){
     args->address = &cliaddr;
     args->flag = RUN;
     args->cmd = NO_VAL;
+    args->conn_state = NOT_CONNECTED;
 
     //work on this thread
     pthread_create(&tid, &attr, serverside_communication, args);
@@ -68,8 +70,11 @@ void server(int port){
                                 break;
 
             case CHAT:          //establish chat
-                                message = create_message(0, ASCII, 0, 0, 0, text, strlen(text));
-                                sendmessage(message, args);
+                                if (args->conn_state == NOT_CONNECTED){
+                                    print_message(FAIL, "Not connected");
+                                    break;
+                                }
+                                sendmessage(create_message(0, ASCII, 0, 0, 0, text, strlen(text)), args);
                                 break;
         
         }   

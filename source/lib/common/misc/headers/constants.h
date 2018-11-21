@@ -46,3 +46,7 @@
 #define STRIN   0b00001000
 #define RESEND  0b00000100
 #define END     0b00000010
+
+//connection states
+#define NOT_CONNECTED 0
+#define CONNECTED     1

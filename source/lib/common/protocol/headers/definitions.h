@@ -38,6 +38,7 @@ typedef struct thread_args{
     int flag;
     int cmd;
     char * data;
+    int conn_state;
 }THREAD_ARGS;
 
 #endif
