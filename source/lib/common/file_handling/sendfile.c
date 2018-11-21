@@ -32,6 +32,7 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
 
     int filename_fragment_count = (strlen(args->data) / args->frag_size);
     if ( + (strlen(args->data) % args->frag_size) != 0) filename_fragment_count += 1;
+    
 
     //process file to send
         // make fragments into linked list
@@ -39,36 +40,39 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     memcpy(fragment_buffer, buffer, args->frag_size);
 
     FRAGMENT * first = calloc(1, sizeof(FRAGMENT));
-    first->message = create_message(MSGID, BINARY, 1, 0, frag_count, fragment_buffer, args->frag_size);
+    first->message = create_message(MSGID, BINARY, 1, 0, frag_count, fragment_buffer, (frag_count > 1)?(args->frag_size):(file_len%args->frag_size) );
     FRAGMENT * iterator = first;
 
     for (int i = 1; i < frag_count; i++){
         iterator->next = calloc(1, sizeof(FRAGMENT));
         iterator = iterator->next;
         memcpy(fragment_buffer, buffer+(i*args->frag_size), args->frag_size);
-        iterator->message = create_message(MSGID, BINARY, 1, i, frag_count, fragment_buffer, args->frag_size);
+        iterator->message = create_message(MSGID, BINARY, 1, i, frag_count, fragment_buffer, (i+1 == frag_count)?(file_len%args->frag_size):(args->frag_size) );
     }
     iterator->next == NULL;
 
     //process filename
     FRAGMENT * first_filename = calloc(1, sizeof(FRAGMENT));
     memcpy(fragment_buffer, args->data, args->frag_size);
-    first_filename->message = create_message(MSGID, FILENAME, 1, 0, filename_fragment_count, fragment_buffer, args->frag_size);
+    first_filename->message = create_message(MSGID, FILENAME, 1, 0, filename_fragment_count, fragment_buffer, strlen(fragment_buffer));
     iterator = first_filename;
     
     for (int i = 1; i < filename_fragment_count; i++){
         iterator->next = calloc(1, sizeof(FRAGMENT));
         iterator = iterator->next;
         memcpy(fragment_buffer, args->data+(i*args->frag_size), args->frag_size);
-        iterator->message = create_message(MSGID, FILENAME, 1, i, frag_count, fragment_buffer, args->frag_size);
+        iterator->message = create_message(MSGID, FILENAME, 1, i, filename_fragment_count, fragment_buffer, strlen(fragment_buffer));
     }
     iterator->next = NULL;
+
+    sleep(1);
 
     //send filename
     iterator = first_filename;
     while (iterator != NULL){
+        usleep(20000);
+        // sleep(1);
         sendmessage(iterator->message, args);
-        usleep(20);
         print_message(INFO, "Sending filename fragment");
         iterator = iterator->next;
     }
@@ -77,8 +81,9 @@ int sendfile(MESSAGE * message, THREAD_ARGS * args){
     //send file
     iterator = first;
     while (iterator != NULL){
+        usleep(20000);
+        // sleep(1);
         sendmessage(iterator->message, args);
-        usleep(20);
         print_message(INFO, "Sending fragment");
         iterator = iterator->next;
     }

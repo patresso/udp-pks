@@ -9,5 +9,4 @@
 #include <unistd.h>
 #include "../../protocol/headers/definitions.h"
 
-
-int recievefile(MESSAGE * message);
+int recievefile(MESSAGE * message, THREAD_ARGS * args);

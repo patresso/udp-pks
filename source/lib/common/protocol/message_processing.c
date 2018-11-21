@@ -43,7 +43,7 @@ MESSAGE * parse_from_bytes(char * buffer){
         memcpy(&(new->data_length), buffer+4, 2);
         memcpy(&(new->message_stream_id), buffer+6, 2);
         memcpy(&(new->sequence_number), buffer+8, 4);
-        memcpy(&(new->sequence_number), buffer+12, 4);
+        memcpy(&(new->fragment_count), buffer+12, 4);
         new->data = calloc(new->data_length, sizeof(char));
         memcpy(new->data, buffer+16, new->data_length);
     }

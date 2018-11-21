@@ -9,7 +9,7 @@ int sendmessage(MESSAGE * msg, THREAD_ARGS * args){
     int n = sendto(args->sockfd, buffer, 16+msg->data_length, 0, (const struct sockaddr*)args->address, sizeof(*args->address));
     if (n < 0) print_message(FAIL, "Message not sent");
     
-    print_message(INFO, "Sending");
-    printf("type: %d\n", msg->message_type);
+    // print_message(INFO, "Sending");
+    // printf("type: %d\n", msg->message_type);
     return 0;
 }

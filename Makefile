@@ -3,3 +3,4 @@ dev: source/lib/common/misc/intro.c source/app.c source/lib/common/misc/messages
 
 clean:
 	rm dev
+	rm downloads/*.*
