@@ -53,8 +53,7 @@ void server(int port){
                                 close(sockfd);
                                 exit(EXIT_SUCCESS);
 
-            case DISCONNECT:    print_message(INFO, "Not yet implemented");
-                                //send closing message
+            case DISCONNECT:    //send closing message
                                 sendmessage(create_message(FIN, NO_DATA, 0, 0, 0, NULL, 0), args);
                                 args->cmd = DISCONNECT;
                                 break;

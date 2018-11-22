@@ -47,12 +47,6 @@ void client(in_addr_t addr, int port){
                                 close(sockfd);
                                 exit(EXIT_SUCCESS);
 
-            case DISCONNECT:    print_message(INFO, "Not yet implemented");
-                                //send closing message
-                                //do all closings
-                                //goto up
-                                break;
-
             case STATISTICS:    print_message(INFO, "Not yet implemented");
                                 break;
 
